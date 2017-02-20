@@ -78,6 +78,40 @@ int pkgInstall (string _pkgname, ofstream* _log)
     return 0;
 }
 
+int pkgUninstall (string _pkgname, ofstream* _log)
+{
+    ifstream _pkglist("/root/user/pkgdata/pkglist", ios_base::in);
+
+    string _input;
+    string _dir = "/root/pkg/" + _pkgname;
+    char cmd[2048];
+
+    bool _installed = false;
+
+    while (!_pkglist.eof() && !_installed)
+    {
+        _pkglist.getline(cmd, 2048);
+        if (cmd == _pkgname)
+            _installed = true;
+    }
+
+    if (!_installed)
+    {
+        log((string)"Command/package \"" + _pkgname + (string)"\" not found.", _log);
+        return 1;
+    }
+
+    log("Are you sure you would like to uninstall " + _pkgname + "? [Y/N] ", _log);
+    prompt(&_input, "");
+
+    if (_input == "N" || _input == "n")
+        return 0;
+
+    RemoveDirectoryA(_dir.c_str());
+
+    return 0;
+}
+
 int pkgSearch (string _pkgname, ofstream* _log)
 {
     ifstream _pkglist("/root/user/pkgdata/pkglist", ios_base::in);
@@ -125,6 +159,45 @@ int pkgSearch (string _pkgname, ofstream* _log)
     _cmd = "exec " + _pkgexec;
 
     parse(_cmd, _log, &_dir);
+
+    return 0;
+}
+
+int pkgInfo (string _pkgname, ofstream* _log)
+{
+    string _output;
+    string _cmd;
+    string _dir = "/root/pkg/" + _pkgname + "/host";
+    char cmd[2048];
+
+    if (pkgSearch(_pkgname, _log))
+        return 0;
+
+    ifstream _host(_dir.c_str(), ios_base::in);
+
+    if (!_host)
+        return 0;
+
+    while(!_host.eof())
+    {
+        _host.getline(cmd, 2048);
+        istringstream _stream(cmd);
+
+        _stream >> _cmd;
+        if (_cmd == "info")
+        {
+            _stream >> _cmd; // =
+            _stream >> _cmd; // package info
+            _output = _cmd;
+            while (!_stream.eof())
+            {
+                _stream >> _cmd;
+                _output = _output + " " + _cmd;
+            }
+        }
+    }
+
+    log(_output, _log);
 
     return 0;
 }

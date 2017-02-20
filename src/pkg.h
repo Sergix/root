@@ -11,6 +11,8 @@
 #include "parse.h"
 
 int pkgInstall (string _pkgname, ofstream* _log);
+int pkgUninstall (string _pkgname, ofstream* _log);
 int pkgSearch (string _pkgname, ofstream* _log);
+int pkgInfo (string _pkgname, ofstream* _log);
 
 #endif // _ROOTPKG

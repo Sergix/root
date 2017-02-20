@@ -34,8 +34,8 @@ int parse(string cmd, ofstream* _log, string* _currentdir)
     {
         _stream >> _cmd;
 
-        if ((_stream.eof() && _cmd == "pkg") || _cmd == "help" || _cmd == "info")
-            log("usage: pkg [install; update; uninstall; info] [name; id]", _log);
+        if ((_stream.eof() && _cmd == "pkg") || _cmd == "help")
+            log("usage: pkg [install; uninstall; info] [name; id]", _log);
 
         else if (_cmd == "install")
         {
@@ -46,6 +46,28 @@ int parse(string cmd, ofstream* _log, string* _currentdir)
 
             else
                 pkgInstall(_cmd, _log);
+        }
+
+        else if (_cmd == "info")
+        {
+            _stream >> _cmd;
+
+            if (_stream.eof() && _cmd == "info")
+                log("usage: package info [name; id]", _log);
+
+            else
+                pkgInfo(_cmd, _log);
+        }
+
+        else if (_cmd == "uninstall")
+        {
+            _stream >> _cmd;
+
+            if (_stream.eof() && _cmd == "info")
+                log("usage: package uninstall [name; id]", _log);
+
+            else
+                pkgUninstall(_cmd, _log);
         }
 
         else
