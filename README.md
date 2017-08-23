@@ -1,3 +1,5 @@
+[![Root](https://sergix.github.io/img/root.png)](https://sergix.github.io/projects/root/index.html)
+
 ## What is ROOT?
 **Restructured and Optimized Operating Terminal (ROOT)** is a command-line tool for Windows, and is a programmable alternative to the Windows "cmd".
 
